@@ -28,7 +28,7 @@ webhooks:
       service:
         namespace: default
         name: cel-shim-webhook
-        path: /
+        path: /validate
         port: 443
       caBundle: | # REPLACE ME
         LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUNHekNDQWFHZ0F3SUJBZ0lRUWRLZDBYTHE3
