@@ -22,13 +22,13 @@ import (
 	"context"
 	time "time"
 
-	admissionregistrationpolyfillsigsk8siov1alpha1 "github.com/jiahuif/cel-shim-experiments/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
-	versioned "github.com/jiahuif/cel-shim-experiments/pkg/generated/clientset/versioned"
-	internalinterfaces "github.com/jiahuif/cel-shim-experiments/pkg/generated/informers/externalversions/internalinterfaces"
-	v1alpha1 "github.com/jiahuif/cel-shim-experiments/pkg/generated/listers/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
+	admissionregistrationpolyfillsigsk8siov1alpha1 "k8s.io/cel-shim/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	versioned "k8s.io/cel-shim/pkg/generated/clientset/versioned"
+	internalinterfaces "k8s.io/cel-shim/pkg/generated/informers/externalversions/internalinterfaces"
+	v1alpha1 "k8s.io/cel-shim/pkg/generated/listers/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
 	cache "k8s.io/client-go/tools/cache"
 )
 

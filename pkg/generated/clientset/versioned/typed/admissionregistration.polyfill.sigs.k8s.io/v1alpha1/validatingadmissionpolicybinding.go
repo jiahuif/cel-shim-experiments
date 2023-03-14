@@ -22,11 +22,11 @@ import (
 	"context"
 	"time"
 
-	v1alpha1 "github.com/jiahuif/cel-shim-experiments/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
-	scheme "github.com/jiahuif/cel-shim-experiments/pkg/generated/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
+	v1alpha1 "k8s.io/cel-shim/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	scheme "k8s.io/cel-shim/pkg/generated/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 

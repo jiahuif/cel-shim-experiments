@@ -19,11 +19,11 @@ limitations under the License.
 package fake
 
 import (
-	clientset "github.com/jiahuif/cel-shim-experiments/pkg/generated/clientset/versioned"
-	admissionregistrationv1alpha1 "github.com/jiahuif/cel-shim-experiments/pkg/generated/clientset/versioned/typed/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
-	fakeadmissionregistrationv1alpha1 "github.com/jiahuif/cel-shim-experiments/pkg/generated/clientset/versioned/typed/admissionregistration.polyfill.sigs.k8s.io/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
+	clientset "k8s.io/cel-shim/pkg/generated/clientset/versioned"
+	admissionregistrationv1alpha1 "k8s.io/cel-shim/pkg/generated/clientset/versioned/typed/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	fakeadmissionregistrationv1alpha1 "k8s.io/cel-shim/pkg/generated/clientset/versioned/typed/admissionregistration.polyfill.sigs.k8s.io/v1alpha1/fake"
 	"k8s.io/client-go/discovery"
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/testing"

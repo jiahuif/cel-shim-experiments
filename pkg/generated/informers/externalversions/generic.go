@@ -21,8 +21,8 @@ package externalversions
 import (
 	"fmt"
 
-	v1alpha1 "github.com/jiahuif/cel-shim-experiments/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
+	v1alpha1 "k8s.io/cel-shim/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
 	cache "k8s.io/client-go/tools/cache"
 )
 

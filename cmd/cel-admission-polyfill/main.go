@@ -25,13 +25,13 @@ import (
 	"k8s.io/klog/v2"
 	aggregatorclientsetscheme "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset/scheme"
 
-	"github.com/jiahuif/cel-shim-experiments/pkg/controller/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
-	"github.com/jiahuif/cel-shim-experiments/pkg/controller/schemaresolver"
-	"github.com/jiahuif/cel-shim-experiments/pkg/generated/clientset/versioned"
-	"github.com/jiahuif/cel-shim-experiments/pkg/generated/clientset/versioned/scheme"
-	"github.com/jiahuif/cel-shim-experiments/pkg/generated/informers/externalversions"
-	"github.com/jiahuif/cel-shim-experiments/pkg/validator"
-	"github.com/jiahuif/cel-shim-experiments/pkg/webhook"
+	"k8s.io/cel-shim/pkg/controller/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	"k8s.io/cel-shim/pkg/controller/schemaresolver"
+	"k8s.io/cel-shim/pkg/generated/clientset/versioned"
+	"k8s.io/cel-shim/pkg/generated/clientset/versioned/scheme"
+	"k8s.io/cel-shim/pkg/generated/informers/externalversions"
+	"k8s.io/cel-shim/pkg/validator"
+	"k8s.io/cel-shim/pkg/webhook"
 )
 
 func main() {

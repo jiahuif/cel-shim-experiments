@@ -1,4 +1,4 @@
-module github.com/jiahuif/cel-shim-experiments
+module k8s.io/cel-shim
 
 go 1.20
 

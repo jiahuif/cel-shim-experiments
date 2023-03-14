@@ -23,12 +23,12 @@ import (
 	sync "sync"
 	time "time"
 
-	versioned "github.com/jiahuif/cel-shim-experiments/pkg/generated/clientset/versioned"
-	admissionregistrationpolyfillsigsk8sio "github.com/jiahuif/cel-shim-experiments/pkg/generated/informers/externalversions/admissionregistration.polyfill.sigs.k8s.io"
-	internalinterfaces "github.com/jiahuif/cel-shim-experiments/pkg/generated/informers/externalversions/internalinterfaces"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
+	versioned "k8s.io/cel-shim/pkg/generated/clientset/versioned"
+	admissionregistrationpolyfillsigsk8sio "k8s.io/cel-shim/pkg/generated/informers/externalversions/admissionregistration.polyfill.sigs.k8s.io"
+	internalinterfaces "k8s.io/cel-shim/pkg/generated/informers/externalversions/internalinterfaces"
 	cache "k8s.io/client-go/tools/cache"
 )
 

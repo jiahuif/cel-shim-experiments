@@ -19,8 +19,8 @@ limitations under the License.
 package admissionregistration
 
 import (
-	v1alpha1 "github.com/jiahuif/cel-shim-experiments/pkg/generated/informers/externalversions/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
-	internalinterfaces "github.com/jiahuif/cel-shim-experiments/pkg/generated/informers/externalversions/internalinterfaces"
+	v1alpha1 "k8s.io/cel-shim/pkg/generated/informers/externalversions/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	internalinterfaces "k8s.io/cel-shim/pkg/generated/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to each of this group's versions.

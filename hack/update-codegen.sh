@@ -24,7 +24,7 @@ CODEGEN_PKG=${CODEGEN_PKG:-$(cd "${SCRIPT_ROOT}"; ls -d -1 ./vendor/k8s.io/code-
 
 function codegen::join() { local IFS="$1"; shift; echo "$*"; }
 
-PKG_NAME="github.com/jiahuif/cel-shim-experiments"
+PKG_NAME="k8s.io/cel-shim"
 
 GROUPS_WITH_VERSIONS="admissionregistration.polyfill.sigs.k8s.io:v1alpha1"
 

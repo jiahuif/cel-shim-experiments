@@ -3,14 +3,14 @@ package v1alpha1
 import (
 	"encoding/json"
 
-	"github.com/jiahuif/cel-shim-experiments/pkg/controller"
-	"github.com/jiahuif/cel-shim-experiments/pkg/generated/clientset/versioned"
-	admissionregistrationpolyfillclient "github.com/jiahuif/cel-shim-experiments/pkg/generated/clientset/versioned/typed/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
 	admissionregistrationv1alpha1types "k8s.io/api/admissionregistration/v1alpha1"
+	"k8s.io/cel-shim/pkg/controller"
+	"k8s.io/cel-shim/pkg/generated/clientset/versioned"
+	admissionregistrationpolyfillclient "k8s.io/cel-shim/pkg/generated/clientset/versioned/typed/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
 	admissionregistrationv1alpha1apply "k8s.io/client-go/applyconfigurations/admissionregistration/v1alpha1"
 	admissionregistrationv1alpha1 "k8s.io/client-go/kubernetes/typed/admissionregistration/v1alpha1"
 
-	"github.com/jiahuif/cel-shim-experiments/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	"k8s.io/cel-shim/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
 	"k8s.io/client-go/kubernetes"
 )
 
