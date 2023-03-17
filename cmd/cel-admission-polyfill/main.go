@@ -34,8 +34,6 @@ import (
 	"github.com/jiahuif/cel-shim-experiments/pkg/webhook"
 )
 
-var DEBUG = false
-
 func main() {
 	var certFile, keyFile string
 	var listenAddr string
