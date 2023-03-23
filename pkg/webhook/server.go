@@ -112,8 +112,7 @@ func (wh *webhook) handleHealth(w http.ResponseWriter, req *http.Request) {
 func (wh *webhook) handleWebhookValidate(w http.ResponseWriter, req *http.Request) {
 	parsed, err := parseRequest(req)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		logger.Error(err, "parsing admission review request")
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
