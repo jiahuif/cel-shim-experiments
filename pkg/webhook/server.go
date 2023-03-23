@@ -66,7 +66,6 @@ func (wh *webhook) Run(ctx context.Context) error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/health", wh.handleHealth)
 	mux.HandleFunc("/validate", wh.handleWebhookValidate)
-	mux.HandleFunc("/mutate", wh.handleWebhookMutate)
 
 	srv := http.Server{}
 	srv.Handler = mux
@@ -263,11 +262,6 @@ func (wh *webhook) handleWebhookValidate(w http.ResponseWriter, req *http.Reques
 		"uid",
 		parsed.Request.UID,
 	)
-}
-
-func (wh *webhook) handleWebhookMutate(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("mutate hit")
-	w.WriteHeader(500)
 }
 
 func reviewResponse(uid types.UID, err error) *admissionv1.AdmissionReview {
