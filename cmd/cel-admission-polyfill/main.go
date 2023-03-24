@@ -4,9 +4,9 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"os"
 	"os/signal"
 	"sync"
+	"syscall"
 	"time"
 
 	apiextensionsclientset "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -44,11 +44,11 @@ func main() {
 
 	klog.EnableContextualLogging(true)
 
-	// Create an overarching context which is cancelled if there is ever an
-	// OS interrupt (eg. Ctrl-C)
-	mainContext, _ := signal.NotifyContext(context.Background(), os.Interrupt)
-	restConfig, err := loadClientConfig()
+	// Handle SIGINT and SIGTERM by cancelling the root context
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
 
+	restConfig, err := loadClientConfig()
 	if err != nil {
 		fmt.Printf("Failed to load Client Configuration: %v", err)
 		return
@@ -90,7 +90,7 @@ func main() {
 
 	// used to keep process alive until all workers are finished
 	waitGroup := sync.WaitGroup{}
-	serverContext, serverCancel := context.WithCancel(mainContext)
+	serverContext, serverCancel := context.WithCancel(ctx)
 
 	// Start any informers
 	// What is appropriate resync perriod?
@@ -121,8 +121,6 @@ func main() {
 	}
 
 	validators := []admission.ValidationInterface{
-		// StartV0Alpha1(serverContext, cleanupWorker, structuralschemaController, customFactory.Celadmissionpolyfill().V0alpha1().ValidationRuleSets()),
-		// StartV0Alpha2(serverContext, cleanupWorker, dynamicClient, apiextensionsClient, structuralschemaController, customFactory.Celadmissionpolyfill().V0alpha2().PolicyTemplates().Informer()),
 		v1alpha1.NewPlugin(factory, kubeClient, restmapper, schemaresolver.New(apiextensionsFactory.Apiextensions().V1().CustomResourceDefinitions(), kubeClient.Discovery()), dynamicClient, nil),
 	}
 
