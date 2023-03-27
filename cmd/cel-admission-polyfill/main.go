@@ -106,11 +106,11 @@ func main() {
 		return restmapper.NewDiscoveryRESTMapper(groupResources), nil
 	}).(meta.ResettableRESTMapper)
 
-	go wait.PollUntil(1*time.Minute, func() (done bool, err error) {
+	go wait.PollUntilContextCancel(ctx, 1*time.Minute, false, func(ctx context.Context) (done bool, err error) {
 		// Refresh restmapper every minute
 		restmapper.Reset()
 		return false, nil
-	}, serverContext.Done())
+	})
 
 	// structuralschemaController := structuralschema.NewController(
 	// 	apiextensionsFactory.Apiextensions().V1().CustomResourceDefinitions().Informer(),
