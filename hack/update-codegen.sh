@@ -71,7 +71,7 @@ go run k8s.io/code-generator/cmd/deepcopy-gen \
   --input-dirs $(codegen::join , "${FQ_APIS[@]}") \
   --output-file-base zz_generated.deepcopy \
   --go-header-file $BOILERPLATE \
-  --output-base .
+  --output-base ${SCRIPT_ROOT}/../../../
 
 # Generate CRD manifests for all types using controller-gen
 echo "Generating crd manifests for ${GROUPS_WITH_VERSIONS}"
@@ -79,5 +79,11 @@ go run sigs.k8s.io/controller-tools/cmd/controller-gen \
   crd \
   paths=./pkg/apis/... \
   output:dir=./crds
+
+# Generated CRDs cannot have the empty object defaults, overwriting afterwards
+go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchConstraints.properties.namespaceSelector.default = {}" "./crds/admissionregistration.polyfill.sigs.k8s.io_validatingadmissionpolicies.yaml" -i
+go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchConstraints.properties.objectSelector.default = {}" "./crds/admissionregistration.polyfill.sigs.k8s.io_validatingadmissionpolicies.yaml" -i
+go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchResources.properties.namespaceSelector.default = {}" "./crds/admissionregistration.polyfill.sigs.k8s.io_validatingadmissionpolicybindings.yaml" -i
+go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchResources.properties.objectSelector.default = {}" "./crds/admissionregistration.polyfill.sigs.k8s.io_validatingadmissionpolicybindings.yaml" -i
 
 popd >/dev/null
