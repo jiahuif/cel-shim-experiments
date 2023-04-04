@@ -27,12 +27,14 @@ spec:
       labels:
         app: cel-shim-webhook
     spec:
+      serviceAccountName: cel-webhook
       containers:
         - name: cel-shim-webhook
           image: kubernetes-x/cel-shim-webhook:v1
           args:
             - -cert=/etc/tls/tls.crt
             - -key=/etc/tls/tls.key
+            - -addr=:443
           volumeMounts:
             - mountPath: "/etc/tls"
               name: tls
