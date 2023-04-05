@@ -20,7 +20,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
-func runServer(certFile, keyFile, addr string, targetServer string) error {
+func runServer(certFile, keyFile, addr string) error {
 	config, err := loadClientConfig()
 	if err != nil {
 		return err
@@ -92,13 +92,11 @@ func main() {
 	var certFile string
 	var keyFile string
 	var addr string
-	var targetServer string
 	flag.StringVar(&certFile, "cert", "server.pem", "Path to TLS certificate file.")
 	flag.StringVar(&keyFile, "key", "server-key.pem", "Path to TLS key file.")
 	flag.StringVar(&addr, "addr", "0.0.0.0:8443", "Address to listen on")
-	flag.StringVar(&targetServer, "target", "https://127.0.0.1:6443", "Target server")
 	flag.Parse()
-	err := runServer(certFile, keyFile, addr, targetServer)
+	err := runServer(certFile, keyFile, addr)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
