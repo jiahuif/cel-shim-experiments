@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2017 The Kubernetes Authors.
+# Copyright 2023 The Kubernetes Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,16 @@ set -o nounset
 set -o pipefail
 
 SCRIPT_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
-CODEGEN_PKG=${CODEGEN_PKG:-$(cd "${SCRIPT_ROOT}"; ls -d -1 ./vendor/k8s.io/code-generator 2>/dev/null || echo ../code-generator)}
+CODEGEN_PKG=${CODEGEN_PKG:-$(
+  cd "${SCRIPT_ROOT}"
+  ls -d -1 ./vendor/k8s.io/code-generator 2>/dev/null || echo ../code-generator
+)}
 
-
-function codegen::join() { local IFS="$1"; shift; echo "$*"; }
+function codegen::join() {
+  local IFS="$1"
+  shift
+  echo "$*"
+}
 
 PKG_NAME="k8s.io/cel-shim"
 
@@ -41,11 +47,11 @@ chmod +x "${CODEGEN_PKG}"/generate-groups.sh
 "${CODEGEN_PKG}"/generate-groups.sh "informer,client,lister" \
   ${PKG_NAME}/${OUTPUT_PKG} $APIS_PKG \
   "$GROUPS_WITH_VERSIONS" \
-  --go-header-file $BOILERPLATE \
-  --output-base ${SCRIPT_ROOT}/../../../
+  --go-header-file "$BOILERPLATE" \
+  --output-base "${SCRIPT_ROOT}/../../../"
 
 # For some reason register-gen is not included in the above code generators?
-pushd $SCRIPT_ROOT >/dev/null
+pushd "$SCRIPT_ROOT" >/dev/null
 
 # enumerate group versions
 FQ_APIS=() # e.g. k8s.io/api/apps/v1
@@ -58,20 +64,19 @@ for GVs in ${GROUPS_WITH_VERSIONS}; do
   done
 done
 
-
 echo "Generating register files for ${GROUPS_WITH_VERSIONS}"
 go run k8s.io/code-generator/cmd/register-gen \
-  --input-dirs $(codegen::join , "${FQ_APIS[@]}") \
+  --input-dirs "$(codegen::join , "${FQ_APIS[@]}")" \
   --output-file-base zz_generated.register \
-  --go-header-file $BOILERPLATE \
+  --go-header-file "$BOILERPLATE" \
   --output-base .
 
 echo "Generating deepcopy files for ${GROUPS_WITH_VERSIONS}"
 go run k8s.io/code-generator/cmd/deepcopy-gen \
-  --input-dirs $(codegen::join , "${FQ_APIS[@]}") \
+  --input-dirs "$(codegen::join , "${FQ_APIS[@]}")" \
   --output-file-base zz_generated.deepcopy \
-  --go-header-file $BOILERPLATE \
-  --output-base ${SCRIPT_ROOT}/../../../
+  --go-header-file "$BOILERPLATE" \
+  --output-base "${SCRIPT_ROOT}/../../../"
 
 # Generate CRD manifests for all types using controller-gen
 echo "Generating crd manifests for ${GROUPS_WITH_VERSIONS}"
