@@ -492,10 +492,11 @@ func (un *unparser) writeOperatorWithWrapping(fun string, unmangled string) bool
 			un.str.WriteString(" ")
 		}
 		return true
+	} else {
+		un.str.WriteString(" ")
+		un.str.WriteString(unmangled)
+		un.str.WriteString(" ")
 	}
-	un.str.WriteString(" ")
-	un.str.WriteString(unmangled)
-	un.str.WriteString(" ")
 	return false
 }
 

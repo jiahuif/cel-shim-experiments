@@ -52,9 +52,9 @@ unary
 
 member
     : primary                                                       # PrimaryExpr
-    | member op=('.'|'.?') id=IDENTIFIER                            # Select
-    | member op='.' id=IDENTIFIER open='(' args=exprList? ')'       # MemberCall
-    | member op=('['|'[?') index=expr ']'                           # Index
+    | member op='.' id=IDENTIFIER (open='(' args=exprList? ')')?    # SelectOrCall
+    | member op='[' index=expr ']'                                  # Index
+    | member op='{' entries=fieldInitializerList? ','? '}'          # CreateMessage
     ;
 
 primary
@@ -62,8 +62,6 @@ primary
     | '(' e=expr ')'                                                # Nested
     | op='[' elems=exprList? ','? ']'                               # CreateList
     | op='{' entries=mapInitializerList? ','? '}'                   # CreateStruct
-    | leadingDot='.'? ids+=IDENTIFIER (ops+='.' ids+=IDENTIFIER)*
-        op='{' entries=fieldInitializerList? ','? '}'               # CreateMessage
     | literal                                                       # ConstantLiteral
     ;
 
@@ -72,19 +70,11 @@ exprList
     ;
 
 fieldInitializerList
-    : fields+=optField cols+=':' values+=expr (',' fields+=optField cols+=':' values+=expr)*
-    ;
-
-optField
-    : (opt='?')? IDENTIFIER
+    : fields+=IDENTIFIER cols+=':' values+=expr (',' fields+=IDENTIFIER cols+=':' values+=expr)*
     ;
 
 mapInitializerList
-    : keys+=optKey cols+=':' values+=expr (',' keys+=optKey cols+=':' values+=expr)*
-    ;
-
-optKey
-    : (opt='?')? expr
+    : keys+=expr cols+=':' values+=expr (',' keys+=expr cols+=':' values+=expr)*
     ;
 
 literal

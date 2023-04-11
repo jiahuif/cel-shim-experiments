@@ -34,17 +34,17 @@ type CELListener interface {
 	// EnterNegate is called when entering the Negate production.
 	EnterNegate(c *NegateContext)
 
-	// EnterMemberCall is called when entering the MemberCall production.
-	EnterMemberCall(c *MemberCallContext)
-
-	// EnterSelect is called when entering the Select production.
-	EnterSelect(c *SelectContext)
+	// EnterSelectOrCall is called when entering the SelectOrCall production.
+	EnterSelectOrCall(c *SelectOrCallContext)
 
 	// EnterPrimaryExpr is called when entering the PrimaryExpr production.
 	EnterPrimaryExpr(c *PrimaryExprContext)
 
 	// EnterIndex is called when entering the Index production.
 	EnterIndex(c *IndexContext)
+
+	// EnterCreateMessage is called when entering the CreateMessage production.
+	EnterCreateMessage(c *CreateMessageContext)
 
 	// EnterIdentOrGlobalCall is called when entering the IdentOrGlobalCall production.
 	EnterIdentOrGlobalCall(c *IdentOrGlobalCallContext)
@@ -58,9 +58,6 @@ type CELListener interface {
 	// EnterCreateStruct is called when entering the CreateStruct production.
 	EnterCreateStruct(c *CreateStructContext)
 
-	// EnterCreateMessage is called when entering the CreateMessage production.
-	EnterCreateMessage(c *CreateMessageContext)
-
 	// EnterConstantLiteral is called when entering the ConstantLiteral production.
 	EnterConstantLiteral(c *ConstantLiteralContext)
 
@@ -70,14 +67,8 @@ type CELListener interface {
 	// EnterFieldInitializerList is called when entering the fieldInitializerList production.
 	EnterFieldInitializerList(c *FieldInitializerListContext)
 
-	// EnterOptField is called when entering the optField production.
-	EnterOptField(c *OptFieldContext)
-
 	// EnterMapInitializerList is called when entering the mapInitializerList production.
 	EnterMapInitializerList(c *MapInitializerListContext)
-
-	// EnterOptKey is called when entering the optKey production.
-	EnterOptKey(c *OptKeyContext)
 
 	// EnterInt is called when entering the Int production.
 	EnterInt(c *IntContext)
@@ -130,17 +121,17 @@ type CELListener interface {
 	// ExitNegate is called when exiting the Negate production.
 	ExitNegate(c *NegateContext)
 
-	// ExitMemberCall is called when exiting the MemberCall production.
-	ExitMemberCall(c *MemberCallContext)
-
-	// ExitSelect is called when exiting the Select production.
-	ExitSelect(c *SelectContext)
+	// ExitSelectOrCall is called when exiting the SelectOrCall production.
+	ExitSelectOrCall(c *SelectOrCallContext)
 
 	// ExitPrimaryExpr is called when exiting the PrimaryExpr production.
 	ExitPrimaryExpr(c *PrimaryExprContext)
 
 	// ExitIndex is called when exiting the Index production.
 	ExitIndex(c *IndexContext)
+
+	// ExitCreateMessage is called when exiting the CreateMessage production.
+	ExitCreateMessage(c *CreateMessageContext)
 
 	// ExitIdentOrGlobalCall is called when exiting the IdentOrGlobalCall production.
 	ExitIdentOrGlobalCall(c *IdentOrGlobalCallContext)
@@ -154,9 +145,6 @@ type CELListener interface {
 	// ExitCreateStruct is called when exiting the CreateStruct production.
 	ExitCreateStruct(c *CreateStructContext)
 
-	// ExitCreateMessage is called when exiting the CreateMessage production.
-	ExitCreateMessage(c *CreateMessageContext)
-
 	// ExitConstantLiteral is called when exiting the ConstantLiteral production.
 	ExitConstantLiteral(c *ConstantLiteralContext)
 
@@ -166,14 +154,8 @@ type CELListener interface {
 	// ExitFieldInitializerList is called when exiting the fieldInitializerList production.
 	ExitFieldInitializerList(c *FieldInitializerListContext)
 
-	// ExitOptField is called when exiting the optField production.
-	ExitOptField(c *OptFieldContext)
-
 	// ExitMapInitializerList is called when exiting the mapInitializerList production.
 	ExitMapInitializerList(c *MapInitializerListContext)
-
-	// ExitOptKey is called when exiting the optKey production.
-	ExitOptKey(c *OptKeyContext)
 
 	// ExitInt is called when exiting the Int production.
 	ExitInt(c *IntContext)

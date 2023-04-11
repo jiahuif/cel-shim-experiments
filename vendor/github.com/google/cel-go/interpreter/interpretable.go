@@ -64,17 +64,10 @@ type InterpretableAttribute interface {
 
 	// Qualify replicates the Attribute.Qualify method to permit extension and interception
 	// of object qualification.
-	Qualify(vars Activation, obj any) (any, error)
-
-	// QualifyIfPresent qualifies the object if the qualifier is declared or defined on the object.
-	// The 'presenceOnly' flag indicates that the value is not necessary, just a boolean status as
-	// to whether the qualifier is present.
-	QualifyIfPresent(vars Activation, obj any, presenceOnly bool) (any, bool, error)
-
-	IsOptional() bool
+	Qualify(vars Activation, obj interface{}) (interface{}, error)
 
 	// Resolve returns the value of the Attribute given the current Activation.
-	Resolve(Activation) (any, error)
+	Resolve(Activation) (interface{}, error)
 }
 
 // InterpretableCall interface for inspecting Interpretable instructions related to function calls.
@@ -110,10 +103,10 @@ type InterpretableConstructor interface {
 // Core Interpretable implementations used during the program planning phase.
 
 type evalTestOnly struct {
-	id    int64
-	attr  InterpretableAttribute
-	qual  Qualifier
-	field types.String
+	id        int64
+	op        Interpretable
+	field     types.String
+	fieldType *ref.FieldType
 }
 
 // ID implements the Interpretable interface method.
@@ -123,34 +116,41 @@ func (test *evalTestOnly) ID() int64 {
 
 // Eval implements the Interpretable interface method.
 func (test *evalTestOnly) Eval(ctx Activation) ref.Val {
-	val, err := test.attr.Resolve(ctx)
-	if err != nil {
-		return types.NewErr(err.Error())
-	}
-	optVal, isOpt := val.(*types.Optional)
-	if isOpt {
-		if !optVal.HasValue() {
+	// Handle field selection on a proto in the most efficient way possible.
+	if test.fieldType != nil {
+		opAttr, ok := test.op.(InterpretableAttribute)
+		if ok {
+			opVal, err := opAttr.Resolve(ctx)
+			if err != nil {
+				return types.NewErr(err.Error())
+			}
+			refVal, ok := opVal.(ref.Val)
+			if ok {
+				opVal = refVal.Value()
+			}
+			if test.fieldType.IsSet(opVal) {
+				return types.True
+			}
 			return types.False
 		}
-		val = optVal.GetValue()
 	}
-	out, found, err := test.qual.QualifyIfPresent(ctx, val, true)
-	if err != nil {
-		return types.NewErr(err.Error())
+
+	obj := test.op.Eval(ctx)
+	tester, ok := obj.(traits.FieldTester)
+	if ok {
+		return tester.IsSet(test.field)
 	}
-	if unk, isUnk := out.(types.Unknown); isUnk {
-		return unk
+	container, ok := obj.(traits.Container)
+	if ok {
+		return container.Contains(test.field)
 	}
-	if found {
-		return types.True
-	}
-	return types.False
+	return types.ValOrErr(obj, "invalid type for field selection.")
 }
 
 // Cost provides the heuristic cost of a `has(field)` macro. The cost has at least 1 for determining
 // if the field exists, apart from the cost of accessing the field.
 func (test *evalTestOnly) Cost() (min, max int64) {
-	min, max = estimateCost(test.attr)
+	min, max = estimateCost(test.op)
 	min++
 	max++
 	return
@@ -655,11 +655,10 @@ func (l *evalList) Cost() (min, max int64) {
 }
 
 type evalMap struct {
-	id        int64
-	keys      []Interpretable
-	vals      []Interpretable
-	optionals []bool
-	adapter   ref.TypeAdapter
+	id      int64
+	keys    []Interpretable
+	vals    []Interpretable
+	adapter ref.TypeAdapter
 }
 
 // ID implements the Interpretable interface method.
@@ -679,18 +678,6 @@ func (m *evalMap) Eval(ctx Activation) ref.Val {
 		valVal := m.vals[i].Eval(ctx)
 		if types.IsUnknownOrError(valVal) {
 			return valVal
-		}
-		isOpt := m.optionals[i]
-		if isOpt {
-			optVal, ok := valVal.(*types.Optional)
-			if !ok {
-				return invalidOptionalEntryInit(keyVal, valVal)
-			}
-			if !optVal.HasValue() {
-				delete(entries, keyVal)
-				continue
-			}
-			valVal = optVal.GetValue()
 		}
 		entries[keyVal] = valVal
 	}
@@ -725,12 +712,11 @@ func (m *evalMap) Cost() (min, max int64) {
 }
 
 type evalObj struct {
-	id        int64
-	typeName  string
-	fields    []string
-	vals      []Interpretable
-	optionals []bool
-	provider  ref.TypeProvider
+	id       int64
+	typeName string
+	fields   []string
+	vals     []Interpretable
+	provider ref.TypeProvider
 }
 
 // ID implements the Interpretable interface method.
@@ -746,18 +732,6 @@ func (o *evalObj) Eval(ctx Activation) ref.Val {
 		val := o.vals[i].Eval(ctx)
 		if types.IsUnknownOrError(val) {
 			return val
-		}
-		isOpt := o.optionals[i]
-		if isOpt {
-			optVal, ok := val.(*types.Optional)
-			if !ok {
-				return invalidOptionalEntryInit(field, val)
-			}
-			if !optVal.HasValue() {
-				delete(fieldVals, field)
-				continue
-			}
-			val = optVal.GetValue()
 		}
 		fieldVals[field] = val
 	}
@@ -949,10 +923,10 @@ func (e *evalWatch) Cost() (min, max int64) {
 	return estimateCost(e.Interpretable)
 }
 
-// evalWatchAttr describes a watcher of an InterpretableAttribute Interpretable.
+// evalWatchAttr describes a watcher of an instAttr Interpretable.
 //
 // Since the watcher may be selected against at a later stage in program planning, the watcher
-// must implement the InterpretableAttribute interface by proxy.
+// must implement the instAttr interface by proxy.
 type evalWatchAttr struct {
 	InterpretableAttribute
 	observer EvalObserver
@@ -1005,7 +979,7 @@ func (e *evalWatchConstQual) Cost() (min, max int64) {
 }
 
 // Qualify observes the qualification of a object via a constant boolean, int, string, or uint.
-func (e *evalWatchConstQual) Qualify(vars Activation, obj any) (any, error) {
+func (e *evalWatchConstQual) Qualify(vars Activation, obj interface{}) (interface{}, error) {
 	out, err := e.ConstantQualifier.Qualify(vars, obj)
 	var val ref.Val
 	if err != nil {
@@ -1018,7 +992,7 @@ func (e *evalWatchConstQual) Qualify(vars Activation, obj any) (any, error) {
 }
 
 // QualifierValueEquals tests whether the incoming value is equal to the qualifying constant.
-func (e *evalWatchConstQual) QualifierValueEquals(value any) bool {
+func (e *evalWatchConstQual) QualifierValueEquals(value interface{}) bool {
 	qve, ok := e.ConstantQualifier.(qualifierValueEquator)
 	return ok && qve.QualifierValueEquals(value)
 }
@@ -1036,7 +1010,7 @@ func (e *evalWatchQual) Cost() (min, max int64) {
 }
 
 // Qualify observes the qualification of a object via a value computed at runtime.
-func (e *evalWatchQual) Qualify(vars Activation, obj any) (any, error) {
+func (e *evalWatchQual) Qualify(vars Activation, obj interface{}) (interface{}, error) {
 	out, err := e.Qualifier.Qualify(vars, obj)
 	var val ref.Val
 	if err != nil {
@@ -1104,7 +1078,7 @@ func (or *evalExhaustiveOr) Eval(ctx Activation) ref.Val {
 	if types.IsError(lVal) {
 		return lVal
 	}
-	return types.MaybeNoSuchOverloadErr(rVal)
+	return types.ValOrErr(rVal, "no such overload")
 }
 
 // Cost implements the Coster interface method.
@@ -1150,7 +1124,7 @@ func (and *evalExhaustiveAnd) Eval(ctx Activation) ref.Val {
 	if types.IsError(lVal) {
 		return lVal
 	}
-	return types.MaybeNoSuchOverloadErr(rVal)
+	return types.ValOrErr(rVal, "no such overload")
 }
 
 // Cost implements the Coster interface method.
@@ -1180,20 +1154,20 @@ func (cond *evalExhaustiveConditional) ID() int64 {
 // Eval implements the Interpretable interface method.
 func (cond *evalExhaustiveConditional) Eval(ctx Activation) ref.Val {
 	cVal := cond.attr.expr.Eval(ctx)
-	tVal, tErr := cond.attr.truthy.Resolve(ctx)
-	fVal, fErr := cond.attr.falsy.Resolve(ctx)
+	tVal, err := cond.attr.truthy.Resolve(ctx)
+	if err != nil {
+		return types.NewErr(err.Error())
+	}
+	fVal, err := cond.attr.falsy.Resolve(ctx)
+	if err != nil {
+		return types.NewErr(err.Error())
+	}
 	cBool, ok := cVal.(types.Bool)
 	if !ok {
 		return types.ValOrErr(cVal, "no such overload")
 	}
 	if cBool {
-		if tErr != nil {
-			return types.NewErr(tErr.Error())
-		}
 		return cond.adapter.NativeToValue(tVal)
-	}
-	if fErr != nil {
-		return types.NewErr(fErr.Error())
 	}
 	return cond.adapter.NativeToValue(fVal)
 }
@@ -1205,9 +1179,8 @@ func (cond *evalExhaustiveConditional) Cost() (min, max int64) {
 
 // evalAttr evaluates an Attribute value.
 type evalAttr struct {
-	adapter  ref.TypeAdapter
-	attr     Attribute
-	optional bool
+	adapter ref.TypeAdapter
+	attr    Attribute
 }
 
 // ID of the attribute instruction.
@@ -1215,19 +1188,19 @@ func (a *evalAttr) ID() int64 {
 	return a.attr.ID()
 }
 
-// AddQualifier implements the InterpretableAttribute interface method.
+// AddQualifier implements the instAttr interface method.
 func (a *evalAttr) AddQualifier(qual Qualifier) (Attribute, error) {
 	attr, err := a.attr.AddQualifier(qual)
 	a.attr = attr
 	return attr, err
 }
 
-// Attr implements the InterpretableAttribute interface method.
+// Attr implements the instAttr interface method.
 func (a *evalAttr) Attr() Attribute {
 	return a.attr
 }
 
-// Adapter implements the InterpretableAttribute interface method.
+// Adapter implements the instAttr interface method.
 func (a *evalAttr) Adapter() ref.TypeAdapter {
 	return a.adapter
 }
@@ -1247,24 +1220,11 @@ func (a *evalAttr) Eval(ctx Activation) ref.Val {
 }
 
 // Qualify proxies to the Attribute's Qualify method.
-func (a *evalAttr) Qualify(ctx Activation, obj any) (any, error) {
+func (a *evalAttr) Qualify(ctx Activation, obj interface{}) (interface{}, error) {
 	return a.attr.Qualify(ctx, obj)
 }
 
-// QualifyIfPresent proxies to the Attribute's QualifyIfPresent method.
-func (a *evalAttr) QualifyIfPresent(ctx Activation, obj any, presenceOnly bool) (any, bool, error) {
-	return a.attr.QualifyIfPresent(ctx, obj, presenceOnly)
-}
-
-func (a *evalAttr) IsOptional() bool {
-	return a.optional
-}
-
 // Resolve proxies to the Attribute's Resolve method.
-func (a *evalAttr) Resolve(ctx Activation) (any, error) {
+func (a *evalAttr) Resolve(ctx Activation) (interface{}, error) {
 	return a.attr.Resolve(ctx)
-}
-
-func invalidOptionalEntryInit(field any, value ref.Val) ref.Val {
-	return types.NewErr("cannot initialize optional entry '%v' from non-optional value %v", field, value)
 }
