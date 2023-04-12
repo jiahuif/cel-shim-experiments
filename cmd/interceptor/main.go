@@ -55,8 +55,8 @@ func runServer(certFile, keyFile, addr string) error {
 			}
 			reader, writer := io.Pipe()
 			request.Out.Body = reader
-			request.Out.URL.Path = strings.ReplaceAll(request.Out.URL.Path, "admissionregistration.k8s.io/v1alpha1", "admissionregistration.polyfill.sigs.k8s.io/v1alpha1")
-			request.Out.URL.RawPath = strings.ReplaceAll(request.Out.URL.RawPath, "admissionregistration.k8s.io/v1alpha1", "admissionregistration.polyfill.sigs.k8s.io/v1alpha1")
+			request.Out.URL.Path = strings.ReplaceAll(request.Out.URL.Path, "admissionregistration.k8s.io/v1alpha1", "admissionregistration.x-k8s.io/v1alpha1")
+			request.Out.URL.RawPath = strings.ReplaceAll(request.Out.URL.RawPath, "admissionregistration.k8s.io/v1alpha1", "admissionregistration.x-k8s.io/v1alpha1")
 			request.Out.Header.Set("Accept", "application/json")
 			request.Out.ContentLength = -1
 			go func() {
@@ -64,18 +64,18 @@ func runServer(certFile, keyFile, addr string) error {
 				defer writer.Close()
 				for scanner.Scan() {
 					b := scanner.Bytes()
-					b = bytes.ReplaceAll(b, []byte("admissionregistration.k8s.io/v1alpha1"), []byte("admissionregistration.polyfill.sigs.k8s.io/v1alpha1"))
+					b = bytes.ReplaceAll(b, []byte("admissionregistration.k8s.io/v1alpha1"), []byte("admissionregistration.x-k8s.io/v1alpha1"))
 					_, _ = writer.Write(b)
 				}
 			}()
 		},
 		ModifyResponse: func(response *http.Response) error {
-			if !strings.Contains(response.Request.URL.Path, "admissionregistration.polyfill.sigs.k8s.io/v1alpha1") {
+			if !strings.Contains(response.Request.URL.Path, "admissionregistration.x-k8s.io/v1alpha1") {
 				return nil
 			}
 			b, err := io.ReadAll(response.Body)
 			_ = response.Body.Close()
-			b = bytes.ReplaceAll(b, []byte("admissionregistration.polyfill.sigs.k8s.io/v1alpha1"), []byte("admissionregistration.k8s.io/v1alpha1"))
+			b = bytes.ReplaceAll(b, []byte("admissionregistration.x-k8s.io/v1alpha1"), []byte("admissionregistration.k8s.io/v1alpha1"))
 			response.Body = io.NopCloser(bytes.NewReader(b))
 			response.ContentLength = int64(len(b))
 			response.Header.Set("Content-Length", strconv.Itoa(len(b)))

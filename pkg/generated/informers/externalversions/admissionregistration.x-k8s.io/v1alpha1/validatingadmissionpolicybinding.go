@@ -25,10 +25,10 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
-	admissionregistrationpolyfillsigsk8siov1alpha1 "k8s.io/cel-shim/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	admissionregistrationxk8siov1alpha1 "k8s.io/cel-shim/pkg/apis/admissionregistration.x-k8s.io/v1alpha1"
 	versioned "k8s.io/cel-shim/pkg/generated/clientset/versioned"
 	internalinterfaces "k8s.io/cel-shim/pkg/generated/informers/externalversions/internalinterfaces"
-	v1alpha1 "k8s.io/cel-shim/pkg/generated/listers/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	v1alpha1 "k8s.io/cel-shim/pkg/generated/listers/admissionregistration.x-k8s.io/v1alpha1"
 	cache "k8s.io/client-go/tools/cache"
 )
 
@@ -70,7 +70,7 @@ func NewFilteredValidatingAdmissionPolicyBindingInformer(client versioned.Interf
 				return client.AdmissionregistrationV1alpha1().ValidatingAdmissionPolicyBindings().Watch(context.TODO(), options)
 			},
 		},
-		&admissionregistrationpolyfillsigsk8siov1alpha1.ValidatingAdmissionPolicyBinding{},
+		&admissionregistrationxk8siov1alpha1.ValidatingAdmissionPolicyBinding{},
 		resyncPeriod,
 		indexers,
 	)
@@ -81,7 +81,7 @@ func (f *validatingAdmissionPolicyBindingInformer) defaultInformer(client versio
 }
 
 func (f *validatingAdmissionPolicyBindingInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&admissionregistrationpolyfillsigsk8siov1alpha1.ValidatingAdmissionPolicyBinding{}, f.defaultInformer)
+	return f.factory.InformerFor(&admissionregistrationxk8siov1alpha1.ValidatingAdmissionPolicyBinding{}, f.defaultInformer)
 }
 
 func (f *validatingAdmissionPolicyBindingInformer) Lister() v1alpha1.ValidatingAdmissionPolicyBindingLister {

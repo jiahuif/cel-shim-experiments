@@ -24,7 +24,7 @@ import (
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	admissionregistrationv1alpha1 "k8s.io/cel-shim/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	admissionregistrationv1alpha1 "k8s.io/cel-shim/pkg/apis/admissionregistration.x-k8s.io/v1alpha1"
 )
 
 var scheme = runtime.NewScheme()

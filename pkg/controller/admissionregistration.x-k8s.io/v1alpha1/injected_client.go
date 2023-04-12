@@ -4,19 +4,19 @@ import (
 	"encoding/json"
 
 	admissionregistrationv1alpha1types "k8s.io/api/admissionregistration/v1alpha1"
-	"k8s.io/cel-shim/pkg/controller"
-	"k8s.io/cel-shim/pkg/generated/clientset/versioned"
-	admissionregistrationpolyfillclient "k8s.io/cel-shim/pkg/generated/clientset/versioned/typed/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
 	admissionregistrationv1alpha1apply "k8s.io/client-go/applyconfigurations/admissionregistration/v1alpha1"
+	"k8s.io/client-go/kubernetes"
 	admissionregistrationv1alpha1 "k8s.io/client-go/kubernetes/typed/admissionregistration/v1alpha1"
 
-	"k8s.io/cel-shim/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
-	"k8s.io/client-go/kubernetes"
+	"k8s.io/cel-shim/pkg/apis/admissionregistration.x-k8s.io/v1alpha1"
+	"k8s.io/cel-shim/pkg/controller"
+	"k8s.io/cel-shim/pkg/generated/clientset/versioned"
+	admissionregistrationxclient "k8s.io/cel-shim/pkg/generated/clientset/versioned/typed/admissionregistration.x-k8s.io/v1alpha1"
 )
 
 type replacedClient struct {
 	admissionregistrationv1alpha1.AdmissionregistrationV1alpha1Interface
-	replacement admissionregistrationpolyfillclient.AdmissionregistrationV1alpha1Interface
+	replacement admissionregistrationxclient.AdmissionregistrationV1alpha1Interface
 }
 
 func (r replacedClient) ValidatingAdmissionPolicies() admissionregistrationv1alpha1.ValidatingAdmissionPolicyInterface {
@@ -43,7 +43,7 @@ func (r replacedClient) ValidatingAdmissionPolicyBindings() admissionregistratio
 
 type wrappedClient struct {
 	kubernetes.Interface
-	replacement admissionregistrationpolyfillclient.AdmissionregistrationV1alpha1Interface
+	replacement admissionregistrationxclient.AdmissionregistrationV1alpha1Interface
 }
 
 func NewWrappedClient(client kubernetes.Interface, customClient versioned.Interface) kubernetes.Interface {
@@ -73,7 +73,7 @@ func NativeToCRDPolicy(vap *admissionregistrationv1alpha1types.ValidatingAdmissi
 	var res v1alpha1.ValidatingAdmissionPolicy
 	err = json.Unmarshal(toJson, &res)
 	if len(res.APIVersion) > 0 {
-		res.APIVersion = "admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+		res.APIVersion = "admissionregistration.x-k8s.io/v1alpha1"
 	}
 	return &res, err
 }
@@ -109,7 +109,7 @@ func NativeToCRDPolicyBinding(vap *admissionregistrationv1alpha1types.Validating
 	var res v1alpha1.ValidatingAdmissionPolicyBinding
 	err = json.Unmarshal(toJson, &res)
 	if len(res.APIVersion) > 0 {
-		res.APIVersion = "admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+		res.APIVersion = "admissionregistration.x-k8s.io/v1alpha1"
 	}
 	return &res, err
 }

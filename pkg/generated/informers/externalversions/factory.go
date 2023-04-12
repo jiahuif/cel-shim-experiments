@@ -27,7 +27,7 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	versioned "k8s.io/cel-shim/pkg/generated/clientset/versioned"
-	admissionregistrationpolyfillsigsk8sio "k8s.io/cel-shim/pkg/generated/informers/externalversions/admissionregistration.polyfill.sigs.k8s.io"
+	admissionregistrationxk8sio "k8s.io/cel-shim/pkg/generated/informers/externalversions/admissionregistration.x-k8s.io"
 	internalinterfaces "k8s.io/cel-shim/pkg/generated/informers/externalversions/internalinterfaces"
 	cache "k8s.io/client-go/tools/cache"
 )
@@ -243,9 +243,9 @@ type SharedInformerFactory interface {
 	// client.
 	InformerFor(obj runtime.Object, newFunc internalinterfaces.NewInformerFunc) cache.SharedIndexInformer
 
-	Admissionregistration() admissionregistrationpolyfillsigsk8sio.Interface
+	Admissionregistration() admissionregistrationxk8sio.Interface
 }
 
-func (f *sharedInformerFactory) Admissionregistration() admissionregistrationpolyfillsigsk8sio.Interface {
-	return admissionregistrationpolyfillsigsk8sio.New(f, f.namespace, f.tweakListOptions)
+func (f *sharedInformerFactory) Admissionregistration() admissionregistrationxk8sio.Interface {
+	return admissionregistrationxk8sio.New(f, f.namespace, f.tweakListOptions)
 }

@@ -21,7 +21,7 @@ package v1alpha1
 import (
 	"net/http"
 
-	v1alpha1 "k8s.io/cel-shim/pkg/apis/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	v1alpha1 "k8s.io/cel-shim/pkg/apis/admissionregistration.x-k8s.io/v1alpha1"
 	"k8s.io/cel-shim/pkg/generated/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
@@ -32,7 +32,7 @@ type AdmissionregistrationV1alpha1Interface interface {
 	ValidatingAdmissionPolicyBindingsGetter
 }
 
-// AdmissionregistrationV1alpha1Client is used to interact with features provided by the admissionregistration.polyfill.sigs.k8s.io group.
+// AdmissionregistrationV1alpha1Client is used to interact with features provided by the admissionregistration.x-k8s.io group.
 type AdmissionregistrationV1alpha1Client struct {
 	restClient rest.Interface
 }

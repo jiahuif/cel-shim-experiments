@@ -25,7 +25,7 @@ import (
 )
 
 // GroupName specifies the group name used to register the objects.
-const GroupName = "admissionregistration.polyfill.sigs.k8s.io"
+const GroupName = "admissionregistration.x-k8s.io"
 
 // GroupVersion specifies the group and the version used to register the objects.
 var GroupVersion = v1.GroupVersion{Group: GroupName, Version: "v1alpha1"}

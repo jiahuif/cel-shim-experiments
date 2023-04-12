@@ -32,7 +32,7 @@ function codegen::join() {
 
 PKG_NAME="k8s.io/cel-shim"
 
-GROUPS_WITH_VERSIONS="admissionregistration.polyfill.sigs.k8s.io:v1alpha1"
+GROUPS_WITH_VERSIONS="admissionregistration.x-k8s.io:v1alpha1"
 
 APIS_PKG="${PKG_NAME}/pkg/apis"
 OUTPUT_PKG="pkg/generated"
@@ -86,9 +86,9 @@ go run sigs.k8s.io/controller-tools/cmd/controller-gen \
   output:dir=./crds
 
 # Generated CRDs cannot have the empty object defaults, overwriting afterwards
-go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchConstraints.properties.namespaceSelector.default = {}" "./crds/admissionregistration.polyfill.sigs.k8s.io_validatingadmissionpolicies.yaml" -i
-go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchConstraints.properties.objectSelector.default = {}" "./crds/admissionregistration.polyfill.sigs.k8s.io_validatingadmissionpolicies.yaml" -i
-go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchResources.properties.namespaceSelector.default = {}" "./crds/admissionregistration.polyfill.sigs.k8s.io_validatingadmissionpolicybindings.yaml" -i
-go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchResources.properties.objectSelector.default = {}" "./crds/admissionregistration.polyfill.sigs.k8s.io_validatingadmissionpolicybindings.yaml" -i
+go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchConstraints.properties.namespaceSelector.default = {}" "./crds/admissionregistration.x-k8s.io_validatingadmissionpolicies.yaml" -i
+go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchConstraints.properties.objectSelector.default = {}" "./crds/admissionregistration.x-k8s.io_validatingadmissionpolicies.yaml" -i
+go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchResources.properties.namespaceSelector.default = {}" "./crds/admissionregistration.x-k8s.io_validatingadmissionpolicybindings.yaml" -i
+go run github.com/mikefarah/yq/v4 eval ".spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.matchResources.properties.objectSelector.default = {}" "./crds/admissionregistration.x-k8s.io_validatingadmissionpolicybindings.yaml" -i
 
 popd >/dev/null

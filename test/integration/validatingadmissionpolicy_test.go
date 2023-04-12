@@ -32,8 +32,8 @@ import (
 	apiextensionsinformers "k8s.io/apiextensions-apiserver/pkg/client/informers/externalversions"
 	"k8s.io/apiextensions-apiserver/test/integration/fixtures"
 	"k8s.io/apiserver/pkg/admission"
-	"k8s.io/cel-shim/pkg/controller/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
-	crdv1alpha1 "k8s.io/cel-shim/pkg/controller/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	"k8s.io/cel-shim/pkg/controller/admissionregistration.x-k8s.io/v1alpha1"
+	crdv1alpha1 "k8s.io/cel-shim/pkg/controller/admissionregistration.x-k8s.io/v1alpha1"
 	"k8s.io/cel-shim/pkg/controller/schemaresolver"
 	"k8s.io/cel-shim/pkg/generated/clientset/versioned"
 	"k8s.io/client-go/discovery"
@@ -339,7 +339,7 @@ func resetcluster(client testClientInterface) error {
 	}
 
 	for _, crd := range crdList.Items {
-		if strings.Contains(crd.Name, "admissionregistration.polyfill.sigs.k8s.io") {
+		if strings.Contains(crd.Name, "admissionregistration.x-k8s.io") {
 			continue
 		}
 

@@ -25,7 +25,7 @@ import (
 	"k8s.io/klog/v2"
 	aggregatorclientsetscheme "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset/scheme"
 
-	"k8s.io/cel-shim/pkg/controller/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	"k8s.io/cel-shim/pkg/controller/admissionregistration.x-k8s.io/v1alpha1"
 	"k8s.io/cel-shim/pkg/controller/schemaresolver"
 	"k8s.io/cel-shim/pkg/generated/clientset/versioned"
 	"k8s.io/cel-shim/pkg/generated/clientset/versioned/scheme"

@@ -6,9 +6,9 @@ metadata:
     api-approved.kubernetes.io: unapproved, request not yet submitted
     controller-gen.kubebuilder.io/version: v0.11.3
   creationTimestamp: null
-  name: validatingadmissionpolicies.admissionregistration.polyfill.sigs.k8s.io
+  name: validatingadmissionpolicies.admissionregistration.x-k8s.io
 spec:
-  group: admissionregistration.polyfill.sigs.k8s.io
+  group: admissionregistration.x-k8s.io
   names:
     kind: ValidatingAdmissionPolicy
     listKind: ValidatingAdmissionPolicyList

@@ -19,7 +19,7 @@ limitations under the License.
 package admissionregistration
 
 import (
-	v1alpha1 "k8s.io/cel-shim/pkg/generated/informers/externalversions/admissionregistration.polyfill.sigs.k8s.io/v1alpha1"
+	v1alpha1 "k8s.io/cel-shim/pkg/generated/informers/externalversions/admissionregistration.x-k8s.io/v1alpha1"
 	internalinterfaces "k8s.io/cel-shim/pkg/generated/informers/externalversions/internalinterfaces"
 )
 
