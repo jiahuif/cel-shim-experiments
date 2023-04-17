@@ -23,7 +23,7 @@ import (
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	versioned "k8s.io/cel-shim/pkg/generated/clientset/versioned"
+	versioned "k8s.io/cel-admission-webhook/pkg/generated/clientset/versioned"
 	cache "k8s.io/client-go/tools/cache"
 )
 

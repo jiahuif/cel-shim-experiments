@@ -25,10 +25,10 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
-	admissionregistrationxk8siov1alpha1 "k8s.io/cel-shim/pkg/apis/admissionregistration.x-k8s.io/v1alpha1"
-	versioned "k8s.io/cel-shim/pkg/generated/clientset/versioned"
-	internalinterfaces "k8s.io/cel-shim/pkg/generated/informers/externalversions/internalinterfaces"
-	v1alpha1 "k8s.io/cel-shim/pkg/generated/listers/admissionregistration.x-k8s.io/v1alpha1"
+	admissionregistrationxk8siov1alpha1 "k8s.io/cel-admission-webhook/pkg/apis/admissionregistration.x-k8s.io/v1alpha1"
+	versioned "k8s.io/cel-admission-webhook/pkg/generated/clientset/versioned"
+	internalinterfaces "k8s.io/cel-admission-webhook/pkg/generated/informers/externalversions/internalinterfaces"
+	v1alpha1 "k8s.io/cel-admission-webhook/pkg/generated/listers/admissionregistration.x-k8s.io/v1alpha1"
 	cache "k8s.io/client-go/tools/cache"
 )
 

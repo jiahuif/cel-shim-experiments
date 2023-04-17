@@ -19,7 +19,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	internalinterfaces "k8s.io/cel-shim/pkg/generated/informers/externalversions/internalinterfaces"
+	internalinterfaces "k8s.io/cel-admission-webhook/pkg/generated/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to all the informers in this group version.

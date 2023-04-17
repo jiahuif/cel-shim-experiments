@@ -26,9 +26,9 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
-	versioned "k8s.io/cel-shim/pkg/generated/clientset/versioned"
-	admissionregistrationxk8sio "k8s.io/cel-shim/pkg/generated/informers/externalversions/admissionregistration.x-k8s.io"
-	internalinterfaces "k8s.io/cel-shim/pkg/generated/informers/externalversions/internalinterfaces"
+	versioned "k8s.io/cel-admission-webhook/pkg/generated/clientset/versioned"
+	admissionregistrationxk8sio "k8s.io/cel-admission-webhook/pkg/generated/informers/externalversions/admissionregistration.x-k8s.io"
+	internalinterfaces "k8s.io/cel-admission-webhook/pkg/generated/informers/externalversions/internalinterfaces"
 	cache "k8s.io/client-go/tools/cache"
 )
 

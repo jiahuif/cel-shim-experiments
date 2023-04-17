@@ -8,10 +8,10 @@ import (
 	"k8s.io/client-go/kubernetes"
 	admissionregistrationv1alpha1 "k8s.io/client-go/kubernetes/typed/admissionregistration/v1alpha1"
 
-	"k8s.io/cel-shim/pkg/apis/admissionregistration.x-k8s.io/v1alpha1"
-	"k8s.io/cel-shim/pkg/controller"
-	"k8s.io/cel-shim/pkg/generated/clientset/versioned"
-	admissionregistrationxclient "k8s.io/cel-shim/pkg/generated/clientset/versioned/typed/admissionregistration.x-k8s.io/v1alpha1"
+	"k8s.io/cel-admission-webhook/pkg/apis/admissionregistration.x-k8s.io/v1alpha1"
+	"k8s.io/cel-admission-webhook/pkg/controller"
+	"k8s.io/cel-admission-webhook/pkg/generated/clientset/versioned"
+	admissionregistrationxclient "k8s.io/cel-admission-webhook/pkg/generated/clientset/versioned/typed/admissionregistration.x-k8s.io/v1alpha1"
 )
 
 type replacedClient struct {

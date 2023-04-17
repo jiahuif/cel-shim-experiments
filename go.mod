@@ -1,4 +1,4 @@
-module k8s.io/cel-shim
+module k8s.io/cel-admission-webhook
 
 go 1.20
 

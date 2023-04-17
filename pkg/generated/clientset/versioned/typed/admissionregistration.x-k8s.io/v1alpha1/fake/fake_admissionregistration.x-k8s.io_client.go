@@ -19,7 +19,7 @@ limitations under the License.
 package fake
 
 import (
-	v1alpha1 "k8s.io/cel-shim/pkg/generated/clientset/versioned/typed/admissionregistration.x-k8s.io/v1alpha1"
+	v1alpha1 "k8s.io/cel-admission-webhook/pkg/generated/clientset/versioned/typed/admissionregistration.x-k8s.io/v1alpha1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
 )

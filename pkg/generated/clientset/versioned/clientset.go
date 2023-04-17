@@ -22,7 +22,7 @@ import (
 	"fmt"
 	"net/http"
 
-	admissionregistrationv1alpha1 "k8s.io/cel-shim/pkg/generated/clientset/versioned/typed/admissionregistration.x-k8s.io/v1alpha1"
+	admissionregistrationv1alpha1 "k8s.io/cel-admission-webhook/pkg/generated/clientset/versioned/typed/admissionregistration.x-k8s.io/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"

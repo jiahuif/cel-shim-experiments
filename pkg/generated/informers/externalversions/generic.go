@@ -22,7 +22,7 @@ import (
 	"fmt"
 
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
-	v1alpha1 "k8s.io/cel-shim/pkg/apis/admissionregistration.x-k8s.io/v1alpha1"
+	v1alpha1 "k8s.io/cel-admission-webhook/pkg/apis/admissionregistration.x-k8s.io/v1alpha1"
 	cache "k8s.io/client-go/tools/cache"
 )
 

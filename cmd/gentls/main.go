@@ -19,7 +19,7 @@ import (
 	"os"
 	"time"
 
-	"k8s.io/cel-shim/pkg/pki"
+	"k8s.io/cel-admission-webhook/pkg/pki"
 )
 
 const oneYear = time.Hour * 24 * 365

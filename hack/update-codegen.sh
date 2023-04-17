@@ -30,7 +30,7 @@ function codegen::join() {
   echo "$*"
 }
 
-PKG_NAME="k8s.io/cel-shim"
+PKG_NAME="k8s.io/cel-admission-webhook"
 
 GROUPS_WITH_VERSIONS="admissionregistration.x-k8s.io:v1alpha1"
 
